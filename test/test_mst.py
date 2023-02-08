@@ -71,4 +71,39 @@ def test_mst_student():
     TODO: Write at least one unit test for MST construction.
     
     """
-    pass
+    adj_mat = np.array([[0, 1, 2, 3, 4, 5], 
+                        [1, 0, 6, 7, 8, 9],
+                        [2, 6, 0, 10, 11, 12],
+                        [3, 7, 10, 0, 13, 14],
+                        [4, 8, 11, 13, 0, 15],
+                        [5, 9, 12, 14, 15, 0]])
+    g = Graph(adj_mat)
+    g.construct_mst()
+
+    total_mst = 0
+    for i in range(g.mst.shape[0]):
+        for j in range(i+1):
+            total_mst += g.mst[i, j]
+
+
+    count_mst = 0
+    for i in range(len(g.mst)):
+        if g.mst[i] is not np.zeros(len(g.mst)):
+            count_mst += 1
+
+    # test that the adjacency matrix is correct
+    # we know the mst of this tree must be 15.0 
+    assert total_mst == 15.0
+    assert total_mst != 15.0, 'Proposed MST has incorrect expected weight'
+    # we know the mst of this tree must have 6 edges
+    assert count_mst == 6
+    assert count_mst != 6, 'Proposed MST has incorrect expected weight'
+
+
+
+
+
+
+    
+
+

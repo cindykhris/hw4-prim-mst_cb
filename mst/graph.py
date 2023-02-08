@@ -26,19 +26,34 @@ class Graph:
             return np.loadtxt(f, delimiter=',')
 
     def construct_mst(self):
-        """
-    
-        TODO: Given `self.adj_mat`, the adjacency matrix of a connected undirected graph, implement Prim's 
-        algorithm to construct an adjacency matrix encoding the minimum spanning tree of `self.adj_mat`. 
-            
-        `self.adj_mat` is a 2D numpy array of floats. Note that because we assume our input graph is
-        undirected, `self.adj_mat` is symmetric. Row i and column j represents the edge weight between
-        vertex i and vertex j. An edge weight of zero indicates that no edge exists. 
-        
-        This function does not return anything. Instead, store the adjacency matrix representation
-        of the minimum spanning tree of `self.adj_mat` in `self.mst`. We highly encourage the
-        use of priority queues in your implementation. Refer to the heapq module, particularly the 
-        `heapify`, `heappop`, and `heappush` functions.
 
-        """
         self.mst = None
+
+        # Prism's algorithm
+        n = len(self.adj_mat)
+        visited = set()        
+        start = 0
+        end = 0
+        heap = [(0, start, end)]
+        mst = np.zeros((self.adj_mat.shape))
+        # loop through 
+        while len(visited) < n:
+            # 2. Initialize a set S to be empty
+            # 3. While Q is not empty:
+            #   a. Remove the vertex u with the smallest key from Q
+            #   b. Add u to S
+            #   c. For each vertex v adjacent to u:
+            #       i. If v is in Q and the edge weight between u and v is less than v's key:
+            #           1. Update v's key to be the edge weight between u and v
+            #           2. Update v's parent to be u
+            weight, start, end = heapq.heappop(heap)
+            if end not in visited:
+                visited.add(end)
+                mst[start][end] = weight
+                mst[end][start] = weight
+                for i in range(n):
+                    if i not in visited and self.adj_mat[end][i] != 0:
+                        heapq.heappush(heap, (self.adj_mat[end][i], end, i))
+
+        self.mst = mst
+        
